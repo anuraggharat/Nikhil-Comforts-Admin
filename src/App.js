@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import { Link, Route, BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
+import Login from "./login/login"
+import AddBlog from './shared/add_blog/add_blog'
+import AddProject from './shared/add_project/add_project'
+import Register from './register/register'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      route: "signin",
+      isSignedIn: false,
+      logginStatus: true
+    };
+  }
+
+  PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={(props) => (
+      localStorage.getItem("token")
+        ? <Component {...props} />
+        : <Redirect to='/' />
+    )} />
+  )
+  
+  onRouteChange = route => {
+    if (route === "signout") {
+      this.setState({ isSignedIn: false });
+    } else if (route === "home") {
+      this.setState({ isSignedIn: true });
+    }
+    this.setState({ route: route });
+  };
+  
+
+    render() {
+      return (
+        <Router>
+          <div>
+          <Switch>
+              <Route exact path = {"/"} component={Login} />
+              <this.PrivateRoute exact path = {"/AddBlog"} component={AddBlog} />
+              <this.PrivateRoute exact path = {"/Register"} component={Register} />
+              <this.PrivateRoute exact path = {"/AddProject"} component={AddProject} />
+          </Switch>
+        </div>
+      </Router>
+      );
+    }
 }
 
 export default App;
+
