@@ -1,156 +1,156 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../../Sidebar/Sidebar';
 import Header from '../../header/header';
-import axios from 'axios';
-import { API_URL } from '../../url'
+import {postblog} from '../../ApiCalls'
 
-
-class AddBlog extends Component {
-    constructor(propos) {
-        super(propos);
-        var date = new Date();
-        // if (date.getMonth() < 10)
-        //     var mm = '0' + (date.getMonth() + 1);
-        // else
-        //     var mm = date.getMonth() + 1;
-
-        // var year = date.getFullYear();
-        // var date = date.getDate();
-        this.state = {
-            title: "",
-            subtitle: "",
-            blog_content: "",
-            slide_url: "",
-            videos: "",
-            upload_date: date
-          };
-          this.onSubmit = this.onSubmit.bind(this);
+export default function AddBlog() {
+    const [values,setValues] =useState({
+        title: "",
+        subtitle: "",
+        blog_content: "",
+        posted_by: "",
+        article_by: "",
+        file:null,
+        upload_date: new Date(),
+    })
+    
+    const {title,subtitle,blog_content,posted_by,article_by,file,upload_date} = values
+    const [loading,setLoading]=useState(false)
+    const [response,setResponse]=useState('')
+    
+    const change=(event)=>{
+        const name=event.target.name
+        const value=event.target.value
+        setValues({
+            ...values,
+            [name]:value
+        })
         
     }
-
-
-    change = e => {
-        this.setState({
-          [e.target.name]: e.target.value
-        });
-      };
     
-    async onSubmit(e) {
-        e.preventDefault();
-        const data = {
-            title: this.state.title,
-            subtitle: this.state.subtitle,
-            blog_content: this.state.blog_content,
-            slide_url: this.state.slide_url,
-            videos: this.state.videos,
-            uploadDate: this.state.upload_date
-        }
-        axios.post(API_URL + "/blogs/addBlog", { data })
-            .then(res => {
-                console.log(res.data.message);
-                window.location.reload(false);
-            })
+    const handleFile=(event)=>{
+        setValues({...values,file:event.target.files[0]})
     }
-
-    render () {
-        return (
-            <div>
+    console.log(values)
+    const  onSubmit=(e)=> {
+        e.preventDefault();
+        const data = new FormData() 
+        data.append('file',file)
+        data.append("title",title );
+        data.append("subtitle",subtitle );
+        data.append("blog_content",blog_content );
+        data.append("posted_by",posted_by );
+        data.append("article_by",article_by );
+        data.append("upload_date",upload_date );
+        postblog(data)
+    }
+    
+    
+    return (
+<div>
                 <Header></Header>
                 <Sidebar></Sidebar>
-                <div class="container">
-                <div class="row">
-                    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                    <div class="card card-signin my-5">
-                        <div class="card-body">
-                        <h4 class="card-title text-center">Add Blog</h4>
-                        <form class = "form-signin" method="POST">
-                            <div class="form-group">
-                            <label for="email">Title</label>
+                <div className="container">
+                <div className="row">
+                    <div className="col-sm-12 col-md-7 col-lg-10 ml-auto">
+                    <div className="card card-signin my-5">
+                        <div className="card-body">
+                        <h4 className="card-title text-center">Add Blog</h4>
+                        <form className = "form-signin" encType = "multipart/form-data" >
+                            
+                            <div className="form-group">
+                            <label htmlFor="email">Title</label>
                             <input
                                 id="title"
                                 type="text"
-                                class="form-control"
+                                className="form-control"
                                 name="title"
-                                value={this.state.title}
-                                onChange={e => this.change(e)}
+                                value={title}
+                                onChange={e =>change(e)}
                                 required
                             />
                             </div>
 
-                            <div class="form-group">
-                            <label for="subtitle">
+                            <div className="form-group">
+                            <label htmlFor="subtitle">
                                 Subtitle
                             </label>
                             <input
                                 id="subtitle"
                                 type="text"
-                                class="form-control"
+                                className="form-control"
                                 name="subtitle"
-                                value={this.state.subtitle}
-                                onChange={e => this.change(e)}
+                                value={subtitle}
+                                onChange={e => change(e)}
                                 required
                             />
                             </div>
-                            <div class="form-group">
-                            <label for="blog_content">
+                            <div className="form-group">
+                            
+                            <label htmlFor="blog_content">
                                 Blog Content
                             </label>
-                            <input
-                                id="blog_content"
-                                type="text"
-                                class="form-control"
-                                name="blog_content"
-                                value={this.state.blog_content}
-                                onChange={e => this.change(e)}
-                                required
-                            />
+                            <textarea 
+                                className="form-control" 
+                                id="blog_content" 
+                                rows="3" 
+                                name="blog_content" 
+                                value={blog_content}
+                                onChange={e =>change(e)}
+                                required></textarea>
+
+                            
                             </div>
-                            <div class="form-group">
-                            <label for="blog_content">
+                            <div className="form-group">
+                            <label htmlFor="blog_content">
                                 Date
                             </label>
                             <input
                                 id="upload_date"
                                 type="date"
-                                class="form-control"
+                                className="form-control"
                                 name="upload_date"
-                                value={this.state.upload_date}
-                                onChange={e => this.change(e)}
+                                value={upload_date}
+                                onChange={e => change(e)}
                                 disabled
                             />
                             </div>
-                            <div class="form-group">
-                            <label for="slide_url">
-                                Slide URL
+                            <div className="form-group">
+                            <label htmlFor="posted_by">
+                                Posted By:
                             </label>
                             <input
-                                id="slide_url"
+                                id="posted_by"
                                 type="text"
-                                class="form-control"
-                                name="slide_url"
-                                value={this.state.slide_url}
-                                onChange={e => this.change(e)}
+                                className="form-control"
+                                name="posted_by"
+                                value={posted_by}
+                                onChange={e =>change(e)}
                                 required
                             />
                             </div>
-                            <div class="form-group">
-                            <label for="videos">
-                                Videos
+                            <div className="form-group">
+                            <label htmlFor="article_by">
+                                Written By:
                             </label>
                             <input
-                                id="videos"
+                                id="article_by"
                                 type="text"
-                                class="form-control"
-                                name="videos"
-                                value={this.state.videos}
-                                onChange={e => this.change(e)}
+                                className="form-control"
+                                name="article_by"
+                                value={article_by}
+                                onChange={e =>change(e)}
                                 required
                             />
                             </div>
-                            <div class="form-group no-margin">
+                            <div className="custom-file">
+                            <input type="file" className="custom-file-input" id="image_path" name="file" onChange={handleFile}  />
+                            <label className="custom-file-label" htmlFor="image_path">Choose Image</label>
+                            </div>
+                            <div className="form-group mt-5">
                             <button
-                                class="btn btn-info btn-block"
-                                onClick={e => this.onSubmit(e)}
+                                className="btn btn-info btn-block"
+                                onClick={e => onSubmit(e)}
                             >
                                 Add
                             </button>
@@ -162,10 +162,5 @@ class AddBlog extends Component {
                 </div>
             </div>
             </div>
-        );
-    }
+    )
 }
-
-
-
-export default AddBlog;
