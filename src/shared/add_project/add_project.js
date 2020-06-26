@@ -1,69 +1,96 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../../Sidebar/Sidebar';
 import Header from '../../header/header';
-import axios from 'axios';
-import { API_URL } from '../../url'
+import {postproject} from '../../ApiCalls'
+import Loader from '../Loader'
 
 
-class AddProject extends Component {
-    constructor(propos) {
-        super(propos);
-        var date = new Date();
-        this.state = {
-            title: "",
-            image: "",
-            upload_date: date
-          };
-          this.onSubmit = this.onSubmit.bind(this);
+export default function Add_project() {
+
+    const [values,setValues] =useState({
+        title: "",
+        description: "",
+        category:"",
+        file:null,
+        upload_date: new Date(),
+    })
+    
+    const {title,description,category,file,upload_date} = values
+    const [loading,setLoading]=useState(false)
+    const [response,setResponse]=useState('')
+    const [error,setError]=useState('')
+
+    
+    const change=(event)=>{
+        const name=event.target.name
+        const value=event.target.value
+        setValues({
+            ...values,
+            [name]:value
+        })
         
     }
-
-
-    change = e => {
-        this.setState({
-          [e.target.name]: e.target.value
-        });
-      };
     
-    async onSubmit(e) {
-        e.preventDefault();
-        const data = {
-            title: this.state.title,
-            image: this.state.image,
-            uploadDate: this.state.upload_date
-        }
-        axios.post(API_URL + "/projects/addProject", { data })
-            .then(res => {
-                console.log(res.data.message);
-                window.location.reload(false);
-            })
+    const handleFile=(event)=>{
+        setValues({...values,file:event.target.files[0]})
     }
 
-    render () {
-        return (
-            <div>
+
+    console.log(values)
+    const  onSubmit=(e)=> {
+        console.log(values)
+        setLoading(true)
+        e.preventDefault();
+        const data = new FormData() 
+        data.append('image',file)
+        data.append("title",title );
+        data.append("description",description );
+        data.append("category",category );
+        data.append("upload_date",upload_date );
+        postproject(data)
+        .then(res=>{
+            if(res.success){
+                setResponse(res.message)
+            }
+            else{
+                setError(res.message)
+            }
+        })
+        .catch(error=>setError(error))
+        .finally(loading=>setLoading(false))
+    }
+
+    return (
+        <div>
                 <Header></Header>
                 <Sidebar></Sidebar>
-                <div class="container">
-                <div class="row">
-                    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                    <div class="card card-signin my-5">
-                        <div class="card-body">
-                        <h4 class="card-title text-center">Add Project</h4>
-                        <form class = "form-signin" method="POST">
-                            <div class="form-group">
-                            <label for="email">Title</label>
+                <div className="container">
+                <div className="row">
+                    <div className="col-sm-9 col-md-7 col-lg-10 ml-auto">
+                    <div className="card card-signin my-5">
+                        <div className="card-body">
+                        <h4 className="card-title text-center">Add Project</h4>
+                        <form className = "form-signin" encType = "multipart/form-data">
+                        {response ? (
+                                              <div className="alert alert-success" role="alert">
+                                              {response}
+                                            </div>
+                        ):(
+                            null
+                        )}  
+                            <div className="form-group">
+                            <label htmlFor="email">Title</label>
                             <input
                                 id="title"
                                 type="text"
-                                class="form-control"
+                                className="form-control"
                                 name="title"
-                                value={this.state.title}
-                                onChange={e => this.change(e)}
+                                value={title}
+                                onChange={e =>change(e)}
                                 required
                             />
                             </div>
-
+{/* 
                             <div class="form-group">
                             <label for="blog_content">
                                 Date
@@ -73,32 +100,52 @@ class AddProject extends Component {
                                 type="date"
                                 class="form-control"
                                 name="upload_date"
-                                value={this.state.upload_date}
+                                value={upload_date}
                                 onChange={e => this.change(e)}
                                 disabled
                             />
+                            </div> */}
+                             <div className="custom-file">
+                            <input type="file" className="custom-file-input" id="image_path" name="file" onChange={handleFile}  />
+                            <label className="custom-file-label" htmlFor="image_path">Choose Image</label>
                             </div>
-                            <div class="form-group">
-                            <label for="image">
-                                IMAGE URL
-                            </label>
+                            
+                            <div className="form-group">
+                            <label htmlFor="">Description</label>
                             <input
-                                id="image"
+                                id="description"
                                 type="text"
-                                class="form-control"
-                                name="image"
-                                value={this.state.image}
-                                onChange={e => this.change(e)}
+                                className="form-control"
+                                name="description"
+                                value={description}
+                                onChange={e =>change(e)}
                                 required
                             />
                             </div>
-                            <div class="form-group no-margin">
-                            <button
-                                class="btn btn-info btn-block"
-                                onClick={e => this.onSubmit(e)}
+                            <div className="form-group">
+                            <label for="category">Category</label>
+                            <input
+                                id="category"
+                                type="text"
+                                className="form-control"
+                                name="category"
+                                value={category}
+                                onChange={e => change(e)}
+                                required
+                            />
+                            </div>
+                            <div className="form-group no-margin">
+                            {loading ? 
+                            (
+                                <Loader />
+                            ):(
+                                <button
+                                className="btn btn-info btn-block"
+                                onClick={e => onSubmit(e)}
                             >
                                 Add
                             </button>
+                            )}
                             </div>
                         </form>
                         </div>
@@ -107,10 +154,5 @@ class AddProject extends Component {
                 </div>
             </div>
             </div>
-        );
-    }
+    )
 }
-
-
-
-export default AddProject;
