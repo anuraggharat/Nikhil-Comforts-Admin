@@ -37,7 +37,7 @@ class App extends Component {
     render() {
       return (
         <Router>
-          <div>
+          <div className=" bg-white">
           <Switch>
               <Route exact path = {"/"} component={Login} />
               <this.PrivateRoute exact path = {"/AddBlog"} component={AddBlog} />

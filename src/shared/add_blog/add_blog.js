@@ -63,10 +63,10 @@ export default function AddBlog() {
 <div>
                 <Header></Header>
                 <Sidebar></Sidebar>
-                <div className="container">
+                <div className="container bg-white">
                 <div className="row">
                     <div className="col-sm-12 col-md-7 col-lg-10 ml-auto">
-                    <div className="card card-signin my-5">
+                    <div className="card shadow-lg border-0 my-5">
                         <div className="card-body">
                         <h4 className="card-title text-center">Add Blog</h4>
                         {response ? (

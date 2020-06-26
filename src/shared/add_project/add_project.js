@@ -67,7 +67,7 @@ export default function Add_project() {
                 <div className="container">
                 <div className="row">
                     <div className="col-sm-9 col-md-7 col-lg-10 ml-auto">
-                    <div className="card card-signin my-5">
+                    <div className="card border-0 shadow-lg my-5">
                         <div className="card-body">
                         <h4 className="card-title text-center">Add Project</h4>
                         <form className = "form-signin" encType = "multipart/form-data">
@@ -105,10 +105,12 @@ export default function Add_project() {
                                 disabled
                             />
                             </div> */}
+                             <div className="form-group">
                              <div className="custom-file">
                             <input type="file" className="custom-file-input" id="image_path" name="file" onChange={handleFile}  />
                             <label className="custom-file-label" htmlFor="image_path">Choose Image</label>
                             </div>
+                             </div>
                             
                             <div className="form-group">
                             <label htmlFor="">Description</label>
