@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../../Sidebar/Sidebar';
 import Header from '../../header/header';
 import {postblog} from '../../ApiCalls'
-
+import Loader from '../Loader'
 export default function AddBlog() {
     const [values,setValues] =useState({
         title: "",
@@ -17,6 +17,8 @@ export default function AddBlog() {
     const {title,subtitle,blog_content,posted_by,article_by,file,upload_date} = values
     const [loading,setLoading]=useState(false)
     const [response,setResponse]=useState('')
+    const [error,setError]=useState('')
+
     
     const change=(event)=>{
         const name=event.target.name
@@ -33,9 +35,10 @@ export default function AddBlog() {
     }
     console.log(values)
     const  onSubmit=(e)=> {
+        setLoading(true)
         e.preventDefault();
         const data = new FormData() 
-        data.append('file',file)
+        data.append('image',file)
         data.append("title",title );
         data.append("subtitle",subtitle );
         data.append("blog_content",blog_content );
@@ -43,6 +46,16 @@ export default function AddBlog() {
         data.append("article_by",article_by );
         data.append("upload_date",upload_date );
         postblog(data)
+        .then(res=>{
+            if(res.success){
+                setResponse(res.message)
+            }
+            else{
+                setError(res.message)
+            }
+        })
+        .catch(error=>setError(error))
+        .finally(loading=>setLoading(false))
     }
     
     
@@ -56,6 +69,13 @@ export default function AddBlog() {
                     <div className="card card-signin my-5">
                         <div className="card-body">
                         <h4 className="card-title text-center">Add Blog</h4>
+                        {response ? (
+                                              <div className="alert alert-success" role="alert">
+                                              {response}
+                                            </div>
+                        ):(
+                            null
+                        )}   
                         <form className = "form-signin" encType = "multipart/form-data" >
                             
                             <div className="form-group">
@@ -148,12 +168,17 @@ export default function AddBlog() {
                             <label className="custom-file-label" htmlFor="image_path">Choose Image</label>
                             </div>
                             <div className="form-group mt-5">
-                            <button
+                            {loading ? 
+                            (
+                                <Loader />
+                            ):(
+                                <button
                                 className="btn btn-info btn-block"
                                 onClick={e => onSubmit(e)}
                             >
                                 Add
                             </button>
+                            )}
                             </div>
                         </form>
                         </div>

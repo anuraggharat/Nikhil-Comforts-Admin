@@ -4,8 +4,11 @@ import { API_URL } from './url'
 
 export const postblog=async(data)=>{
     console.log(data)
+    try {
     const res=await axios.post(API_URL + "/blogs/addBlog", data)
-    console.log('====================================');
-    console.log(res);
-    console.log('====================================');
+    return res.data;
+    } catch (error) {
+        console.log(error)
+        return null
+    }
 }
