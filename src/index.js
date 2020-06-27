@@ -5,13 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import $ from 'jquery';
-import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 import '../node_modules/jquery/dist/jquery.min.js';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
-import { HashRouter } from 'react-router-dom'
 
 
 

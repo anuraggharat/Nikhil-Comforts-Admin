@@ -7,7 +7,7 @@ class Sidebar extends Component {
 
     render () {
         return (
-            <div class="sidenav bg-first  text-white">
+            <div className="sidenav bg-first  text-white">
                 <Link to = "/Register" className=" text-white">Register User</Link>
                 <Link to = "/AddBlog" className=" text-white">Add Blog</Link>
                 <Link to = "/AddProject" className=" text-white">Add Project</Link>

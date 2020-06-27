@@ -70,9 +70,16 @@ export default function AddBlog() {
                         <div className="card-body">
                         <h4 className="card-title text-center">Add Blog</h4>
                         {response ? (
-                                              <div className="alert alert-success" role="alert">
+                        <div className="alert alert-success" role="alert">
                                               {response}
-                                            </div>
+                       </div>
+                        ):(
+                            null
+                        )}
+                        {error ? (
+                        <div className="alert alert-danger" role="alert">
+                                              {error}
+                       </div>
                         ):(
                             null
                         )}   

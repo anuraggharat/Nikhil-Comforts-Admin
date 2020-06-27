@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Link, Route, BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
+import {  Route, BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import Login from "./login/login"
 import AddBlog from './shared/add_blog/add_blog'
 import AddProject from './shared/add_project/add_project'

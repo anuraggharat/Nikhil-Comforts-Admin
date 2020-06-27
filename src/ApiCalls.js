@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { API_URL } from './url'
-import { data } from 'jquery';
 
 
 export const postblog=async(data)=>{
@@ -10,7 +9,7 @@ export const postblog=async(data)=>{
     return res.data;
     } catch (error) {
         console.log(error)
-        return null
+        return {success:false,message:"Invalid Blog"}
     }
 }
 export const postproject=async(data)=>{
@@ -20,12 +19,12 @@ export const postproject=async(data)=>{
         console.log(res)
         return res.data
     } catch (error) {
-        return null
+        return {success:false,message:"Invalid Blog"}
     }
 }
 
 export const loginAdmin=async(data)=>{
-    console.log(data)
+
     try {
         const res=await axios.get(API_URL + "/auth/login", {
             params: {

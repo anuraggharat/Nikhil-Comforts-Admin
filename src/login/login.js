@@ -48,7 +48,6 @@ class Login extends Component {
         // })
         loginAdmin({email:this.state.email,password:this.state.password})
         .then(res=>{
-            console.log(res)
             const token = res.token
             if (res.success) {
                 const expiresInDuration = res.expiresIn;
@@ -90,7 +89,6 @@ class Login extends Component {
       }
 
     render () {
-    console.log(this.state);
 
         return (
             <div className="container pt-5">
@@ -111,7 +109,7 @@ null
                         )}
                         <form className = "form-signin" method="POST">
                             <div className="form-group">
-                            <label for="email">User Email</label>
+                            <label htmlFor="email">User Email</label>
 
                             <input
                                 id="email"
@@ -121,12 +119,12 @@ null
                                 value={this.state.email}
                                 onChange={e => this.change(e)}
                                 required
-                                autofocus
+                                autoFocus
                             />
                             </div>
                             
                             <div className="form-group">
-                            <label for="password">
+                            <label htmlFor="password">
                                 Password
                             
                             </label>

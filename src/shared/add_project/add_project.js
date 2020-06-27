@@ -78,6 +78,13 @@ export default function Add_project() {
                         ):(
                             null
                         )}  
+                        {error ? (
+                                              <div className="alert alert-success" role="alert">
+                                              {error}
+                                            </div>
+                        ):(
+                            null
+                        )}  
                             <div className="form-group">
                             <label htmlFor="email">Title</label>
                             <input
@@ -125,7 +132,7 @@ export default function Add_project() {
                             />
                             </div>
                             <div className="form-group">
-                            <label for="category">Category</label>
+                            <label htmlFor="category">Category</label>
                             <input
                                 id="category"
                                 type="text"
